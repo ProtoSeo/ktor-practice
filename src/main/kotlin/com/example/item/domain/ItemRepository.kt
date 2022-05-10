@@ -3,7 +3,6 @@ package com.example.item.domain
 import com.example.item.dto.ItemRequestDto
 import com.example.item.dto.ItemResponseDto
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class ItemRepository {
@@ -26,7 +25,20 @@ class ItemRepository {
         }
     }
 
-    fun create(itemDto: ItemRequestDto): Long {
+    fun findAll(): List<ItemResponseDto> {
+        return transaction {
+            Items.selectAll().map { row ->
+                ItemResponseDto(
+                    row[Items.id].value,
+                    row[Items.name],
+                    row[Items.price],
+                    row[Items.stockQuantity]
+                )
+            }.toList()
+        }
+    }
+
+    fun save(itemDto: ItemRequestDto): Long {
         return transaction {
             Items.insertAndGetId { row ->
                 row[name] = itemDto.name
