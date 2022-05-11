@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        table {
+            width: 30%;
+            border: 1px solid;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>상품번호</th>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>수량</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${items}">
+                <td th:text="${item.id}"></td>
+                <td th:text="${item.name}"></td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.stockQuantity}"></td>
+                <td>
+                    <button type="button" th:onclick="'location.href=\''+ @{items/{id}/edit (id=${item.id})} + '\''">
+                        수정
+                    </button>
+                </td>
+                <td>
+                    <form action="#" th:action="@{items/{id}/delete (id=${item.id})}" th:method="post">
+                        <button type="submit">삭제</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="button" th:onclick="'location.href=\''+ @{items/new} + '\''">
+            상품 추가
+        </button>
+        <br>
+        <form action="#" th:action="@{items/delete}" th:method="post">
+            <button type="submit">전체 삭제</button>
+        </form>
+        <form action="#" th:action="@{items/new/random}" th:method="post">
+            <button type="submit">랜덤 10개 생성</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
