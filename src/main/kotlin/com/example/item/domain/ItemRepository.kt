@@ -48,6 +48,16 @@ class ItemRepository {
         }
     }
 
+    fun saveRandomItems(randomItems: List<ItemRequestDto>) {
+        transaction {
+            Items.batchInsert(randomItems) { item ->
+                this[Items.name] = item.name
+                this[Items.price] = item.price
+                this[Items.stockQuantity] = item.stockQuantity
+            }
+        }
+    }
+
     fun update(id: Long, itemDto: ItemRequestDto): ItemResponseDto {
         transaction {
             Items.update({ Items.id eq id }) { row ->
@@ -59,6 +69,12 @@ class ItemRepository {
         return findById(id)
     }
 
-    fun clear() = Items.deleteAll()
+    fun delete(id: Long) {
+        transaction {
+            Items.deleteWhere { Items.id eq id }
+        }
+    }
+
+    fun clear() = transaction { Items.deleteAll() }
 
 }
