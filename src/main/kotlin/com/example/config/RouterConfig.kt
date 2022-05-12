@@ -21,7 +21,8 @@ fun Application.configureRouting() {
 fun Routing.indexRoute() {
     route("/") {
         get {
-            call.respond(ThymeleafContent("index", mapOf("host" to call.request.host())))
+            val hostname = System.getenv("HOSTNAME")?: call.request.host()
+            call.respond(ThymeleafContent("index", mapOf("hostname" to hostname)))
         }
     }
 }
